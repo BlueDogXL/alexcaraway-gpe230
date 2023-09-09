@@ -25,6 +25,9 @@ void AMazeCharacter::BeginPlay()
 	_controller = Cast<APlayerController>(GetController());
 	_gameOverScreenInstance = CreateWidget(GetWorld(), _gameOverScreenTemplate);
 	_victoryScreenInstance = CreateWidget(GetWorld(), _victoryScreenTemplate);
+	_hudScreenInstance = CreateWidget(GetWorld(), _hudScreenTemplate);
+	_pauseScreenInstance = CreateWidget(GetWorld(), _pauseScreenTemplate);
+	OpenHUDScreen();
 }
 
 float AMazeCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -84,6 +87,7 @@ void AMazeCharacter::Heal(float healingAmount)
 void AMazeCharacter::OpenVictoryScreen()
 {
 	_victoryScreenInstance->AddToViewport();
+	// UGameplayStatics::PlaySound2D(GetWorld(), _victorySound);
 	PauseGameplay(true);
 	ShowMouseCursor();
 }
@@ -113,6 +117,25 @@ void AMazeCharacter::PauseGameplay(bool isPaused)
 void AMazeCharacter::ShowMouseCursor()
 {
 	_controller->bShowMouseCursor = true;
+}
+
+void AMazeCharacter::OpenPauseScreen()
+{
+	_pauseScreenInstance->AddToViewport();
+	PauseGameplay(true);
+	_gameIsPaused = true;
+}
+
+void AMazeCharacter::ClosePauseScreen()
+{
+	_pauseScreenInstance->RemoveFromViewport();
+	PauseGameplay(false);
+	_gameIsPaused = false;
+}
+
+void AMazeCharacter::OpenHUDScreen()
+{
+	_hudScreenInstance->AddToViewport();
 }
 
 // Called every frame

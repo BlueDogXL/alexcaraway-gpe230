@@ -14,8 +14,12 @@ class GPE230ALEXCARAWAY_API UMazeSaveGame : public USaveGame
 {
 	GENERATED_BODY()
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int latestLevelCompleted;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float masterVolumeSliderSetting;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float musicVolumeSliderSetting;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float sfxVolumeSliderSetting;
 };
