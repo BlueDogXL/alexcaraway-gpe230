@@ -62,11 +62,13 @@ public:
 	AMazeCharacter();
 	UFUNCTION(BlueprintCallable)
 	float GetCurrentHealth();
+	virtual float TakeDamage(float DamageAmount, AActor* DamageCauser);
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+	
 	
 	virtual void DecreaseSpeed(float normalSpeed);
 	virtual void DoSpeedTimer(float deltaTime);
@@ -74,7 +76,7 @@ protected:
 
 	virtual void OpenGameOverScreen();
 	virtual void PauseGameplay(bool isPaused);
-	virtual void ShowMouseCursor();
+	virtual void ShowMouseCursor(bool isShown);
 	UFUNCTION(BlueprintCallable)
 	virtual void OpenPauseScreen();
 	UFUNCTION(BlueprintCallable)

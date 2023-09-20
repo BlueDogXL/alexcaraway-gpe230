@@ -50,6 +50,26 @@ float AMazeCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	}
 }
 
+float AMazeCharacter::TakeDamage(float DamageAmount, AActor* DamageCauser)
+{
+	if (!_isDead) {
+		_currentHealth -= DamageAmount;
+
+		UE_LOG(LogTemp, Log, TEXT("Player took %f damage! %f health remaining!"), DamageAmount, _currentHealth);
+
+		if (_currentHealth <= 0)
+		{
+			Die();
+		}
+
+		return DamageAmount;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
 void AMazeCharacter::IncreaseSpeed(float boostedSpeed, float speedTime)
 {
 	_speedPowerupTimer = speedTime;
@@ -87,9 +107,9 @@ void AMazeCharacter::Heal(float healingAmount)
 void AMazeCharacter::OpenVictoryScreen()
 {
 	_victoryScreenInstance->AddToViewport();
-	// UGameplayStatics::PlaySound2D(GetWorld(), _victorySound);
+	UGameplayStatics::PlaySound2D(GetWorld(), _victorySound);
 	PauseGameplay(true);
-	ShowMouseCursor();
+	ShowMouseCursor(true);
 }
 
 void AMazeCharacter::Die()
@@ -106,7 +126,7 @@ void AMazeCharacter::Die()
 void AMazeCharacter::OpenGameOverScreen()
 {
 	_gameOverScreenInstance->AddToViewport();
-	ShowMouseCursor();
+	ShowMouseCursor(true);
 }
 
 void AMazeCharacter::PauseGameplay(bool isPaused)
@@ -114,22 +134,24 @@ void AMazeCharacter::PauseGameplay(bool isPaused)
 	_controller->SetPause(isPaused);
 }
 
-void AMazeCharacter::ShowMouseCursor()
+void AMazeCharacter::ShowMouseCursor(bool isShown)
 {
-	_controller->bShowMouseCursor = true;
+	_controller->bShowMouseCursor = isShown;
 }
 
 void AMazeCharacter::OpenPauseScreen()
 {
 	_pauseScreenInstance->AddToViewport();
-	PauseGameplay(true);
+	ShowMouseCursor(true);
 	_gameIsPaused = true;
+	PauseGameplay(true);
 }
 
 void AMazeCharacter::ClosePauseScreen()
 {
 	_pauseScreenInstance->RemoveFromViewport();
 	PauseGameplay(false);
+	ShowMouseCursor(false);
 	_gameIsPaused = false;
 }
 
